@@ -11,7 +11,7 @@ import es.mbg.shoppingbasket.exception.PaymentFailureException;
 public class PaymentMockImpl implements PaymentGateWayI {
 
 	@Override
-	public PaymentReturn makePayment(PaymentOrder paymentOrder) {
+	public PaymentReturn makePayment(PaymentOrder paymentOrder) throws PaymentFailureException {
 		if (StringUtils.isNotBlank(paymentOrder.getBankAccountNumber())) {
 			return new PaymentReturn(Constants.PAYMENT_SUCCESSFULL);
 		} else {

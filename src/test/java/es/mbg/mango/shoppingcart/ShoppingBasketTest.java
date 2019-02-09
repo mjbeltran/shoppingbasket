@@ -64,9 +64,15 @@ public class ShoppingBasketTest {
 	@Test
 	public void testPaymentShoppingBasketReturnStock() {
 
-		when(stockApiMock.getStock(new Product("Bicicleta Orbea Master", 0.99))).thenReturn(1L);
+		when(stockApiMock.getStock(any(Product.class))).thenReturn(1L);
+		// PaymentReturn paymentReturn = new
+		// PaymentReturn(Constants.PAYMENT_SUCCESSFULL);
+		// when(paymentGateWayMock.makePayment(any(PaymentOrder.class))).thenReturn(paymentReturn);
+		// ReturnTreatment returnPayment =
+		// shoppingBasket.paymentShoppingBasket(user).getPaymentReturn().getStrReturnPayment();
 		ReturnTreatment returnPayment = shoppingBasket.paymentShoppingBasket(user);
 		assertNotNull(returnPayment);
+		// assertEquals(Constants.PAYMENT_SUCCESSFULL,shoppingBasket.paymentShoppingBasket(user).getPaymentReturn().getStrReturnPayment());
 	}
 
 	@Test
@@ -80,9 +86,8 @@ public class ShoppingBasketTest {
 	}
 
 	@Test
-	public void testVerifyStock() {
+	public void testVerifyStock() throws PaymentFailureException {
 		this.user.setBankAccountNumber("168728378127391239123");
-
 		PaymentReturn returnPay = new PaymentReturn(Constants.PAYMENT_SUCCESSFULL);
 		when(stockApiMock.getStock(any(Product.class))).thenReturn(1L);
 		when(paymentGateWayMock.makePayment(any(PaymentOrder.class))).thenReturn(returnPay);
@@ -90,11 +95,11 @@ public class ShoppingBasketTest {
 				shoppingBasket.paymentShoppingBasket(user).getPaymentReturn().getStrReturnPayment());
 	}
 
-	@Test(expected = PaymentFailureException.class)
+	@Test
 	public void testNotCreditCard() throws Exception {
 		shoppingBasket.setStockApi(new StockApiMockImpl());
 		shoppingBasket.setPaymentGateWay(new PaymentMockImpl());
-		assertEquals(Constants.PAYMENT_SUCCESSFULL,
+		assertEquals(Constants.USER_FAIL_CREDIT_CARD,
 				shoppingBasket.paymentShoppingBasket(user).getPaymentReturn().getStrReturnPayment());
 	}
 

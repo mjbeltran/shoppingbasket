@@ -9,6 +9,7 @@ import es.mbg.shoppingbasket.constants.Constants;
 import es.mbg.shoppingbasket.domain.PaymentOrder;
 import es.mbg.shoppingbasket.domain.PaymentReturn;
 import es.mbg.shoppingbasket.domain.ReturnTreatment;
+import es.mbg.shoppingbasket.exception.PaymentFailureException;
 import es.mbg.shoppingbasket.model.Item;
 import es.mbg.shoppingbasket.model.Product;
 import es.mbg.shoppingbasket.model.User;
@@ -45,13 +46,17 @@ public class ShoppingBasketImpl implements ShoppingBasket {
 	}
 
 	private PaymentReturn preparePayment(User user) {
-		PaymentReturn returnPayment;
+		PaymentReturn returnPayment = null ;
 		PaymentOrder paymentOrder = new PaymentOrder();
 		paymentOrder.setBankAccountNumber(user.getBankAccountNumber());
 		paymentOrder.setUserMandat(user.getMandat());
 		paymentOrder.setValueToPay(user.getShoppingCart().getTotalCart());
 
-		returnPayment = paymentGateWay.makePayment(paymentOrder);
+		try {
+			returnPayment = paymentGateWay.makePayment(paymentOrder);
+		} catch (PaymentFailureException e) {
+			returnPayment = new PaymentReturn(Constants.USER_FAIL_CREDIT_CARD);
+		}
 		return returnPayment;
 	}
 

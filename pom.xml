@@ -14,6 +14,19 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+     <!-- Sonar -->
+    <!-- <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+    <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+    <sonar.language>java</sonar.language> -->
+    
+     <jacoco.version>0.8.0</jacoco.version>
+    <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+    <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
+    <sonar.language>java</sonar.language>
+    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+    <sonar.web.sessionTimeoutInMinutes>4320000</sonar.web.sessionTimeoutInMinutes>
+	<sonar.ws.timeout>10000000</sonar.ws.timeout>
   </properties>
  
 	<dependencies>
@@ -40,4 +53,73 @@
 		
         
     </dependencies>
+    
+   <build>
+    <plugins>
+    
+  <!--   <plugin>
+				    <groupId>org.codehaus.mojo</groupId>
+				    <artifactId>sonar-maven-plugin</artifactId>
+				    <version>3.5.0.1254</version> 
+				</plugin>-->
+        <plugin> 
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.0</version>
+            <executions>
+                <execution>
+                    <id>default-prepare-agent</id>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>default-report</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        
+        <!-- clean test
+        sonar:sonar -Dsonar.host.url=http://192.168.33.10:9090 -->
+        
+<!--         <plugin>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>${jacoco.version}</version>
+    <executions>
+        Unit-tests
+        <execution>
+            <id>agent-for-ut</id>
+            <goals>
+                <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+                <append>true</append>
+                <destFile>${sonar.jacoco.reportPaths}</destFile>
+            </configuration>
+        </execution>
+        Integration-tests executed with failsafe-plugin
+        <execution>
+            <id>agent-for-it</id>
+            <phase>package</phase>
+            <goals>
+                <goal>prepare-agent-integration</goal>
+            </goals>
+            <configuration>
+                <append>true</append>
+                <destFile>${sonar.jacoco.itReportPath}</destFile>
+            </configuration>
+        </execution>
+    </executions>
+</plugin> -->
+
+
+    </plugins>
+  </build>
+
+
 </project>

@@ -1,6 +1,6 @@
 package es.mbg.shoppingbasket.exception;
 
-public class PaymentFailureException extends RuntimeException {
+public class PaymentFailureException extends Exception {
 
 	/**
 	* 
